@@ -9,18 +9,18 @@ function HelloBootstrap() {
       </div>
       <div className="card mb-4">
         <div className="card-header">
-          <h3>Card title</h3>
+          <h3>Card 1</h3>
         </div>
         <div className="card-body">
-          <p className="card-text">Card content</p>
+          <p className="card-text">HELLO</p>
         </div>
       </div>
       <div className="card mb-4">
         <div className="card-header">
-          <h3>Card title</h3>
+          <h3>Card 2</h3>
         </div>
         <div className="card-body">
-          <p className="card-text">Card content</p>
+          <p className="card-text">WORLD</p>
         </div>
       </div>
     </div>

@@ -1,14 +1,11 @@
 import React from "react";
+import Jumbo from "./jumbotron";
 
 function HelloBootstrap() {
   return (
     <div className="container">
       <div className="jumbotron">
-        <h1>Hello, world!</h1>
-        <p>I'm a jumbotron!</p>
-        <p>
-          <button className="btn btn-primary btn-lg">Learn more</button>
-        </p>
+        <Jumbo />
       </div>
       <div className="card mb-4">
         <div className="card-header">

@@ -1,10 +1,18 @@
 import React from "react";
 
 function List(props) {
-  return (
+const groceries = props.groceries;
+// const listItems = groceries.map(x => 
+// <li className="list-group-item" key={x.id}> {x.purchased ? x.name : <strike>{x.name}</strike>}</li>
+// )
+
+const listItems = groceries.filter(x => x.purchased).map(x => 
+  <li className="list-group-item" key={x.id}>{x.id}: {x.name}</li>
+)
+
+return (
     <ul className="list-group">
-      Using the map method, render one li element displaying the text property of each grocery
-      object.
+      {listItems}
     </ul>
   );
 }

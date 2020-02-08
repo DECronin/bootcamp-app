@@ -20,8 +20,9 @@ class OmdbContainer extends Component {
           this.setState({ result: res.data }) 
         } else {
           alert("Please Provide a Valid Search Request for Our Database.");
-          this.defaultState();
+          // build notFound object to populate page like a 404
         }
+        this.defaultState();
       })
       .catch(err => console.log(err));
   };
@@ -54,9 +55,7 @@ class OmdbContainer extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    let { search } = this.state;
-    this.searchMovies(search);
-    this.defaultState();
+    this.searchMovies(this.state.search);
   };
 
   render() {

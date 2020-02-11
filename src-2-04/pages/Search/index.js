@@ -1,30 +1,24 @@
 import React, { useState, useEffect } from "react";
+import API from "../../utils/API";
 import Container from "../../components/Container";
 import SearchForm from "../../components/SearchForm";
 import SearchResults from "../../components/SearchResults";
 import Alert from "../../components/Alert";
-import ArticleContext from "../../utils/ArticleContext";
-import API from "../../utils/API";
 
-function Search() {
-  const [articleState, setArticleState] = useState({
-    title: "",
-    description: "",
-    url: ""
+const Search =() => {
+  const [currentData, setNewData] = useState({
+      search: "Wikipedia",
+      title: "",
+      description: "",
+      url: "",
+      error: ""
   });
-
-  const [search, setSearch] = useState("Wikipedia");
-  const [error, setError] = useState("");
 
   // When the component mounts, update the title to be Wikipedia Searcher
   useEffect(() => {
     document.title = "Wikipedia Searcher";
 
-    if (!search) {
-      return;
-    }
-
-    API.searchTerms(search)
+    API.searchTerms(currentData.search)
       .then(res => {
         if (res.data.length === 0) {
           throw new Error("No results found.");
@@ -32,41 +26,39 @@ function Search() {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        setArticleState({
+        setNewData({... currentData,
           title: res.data[1],
           description: res.data[2][0],
-          url: res.data[3][0]
+          url: res.data[3][0],
+          error: ""
         });
       })
-      .catch(err => setError(err));
-  }, [search]);
+      .catch(err => setNewData({...currentData, error: err.message }));
+  }, [currentData.search]);
 
-  const handleInputChange = event => {
-    setSearch(event.target.value);
+  const handleInputChange = e => {
+    setNewData({...currentData, search: e.target.value });
   };
-
-  const handleFormSubmit = event => {
-    event.preventDefault();
-  };
-
-  return (
-    <ArticleContext.Provider value={articleState}>
+    return (
       <div>
         <Container style={{ minHeight: "100vh" }}>
           <h1 className="text-center">Search For Anything on Wikipedia</h1>
-          <Alert type="danger" style={{ opacity: error ? 1 : 0, marginBottom: 10 }}>
-            {error}
+          <Alert type="danger" style={{ opacity: currentData.error ? 1 : 0, marginBottom: 10 }}>
+            {currentData.error}
           </Alert>
           <SearchForm
-            handleFormSubmit={handleFormSubmit}
             handleInputChange={handleInputChange}
-            results={search}
+            results={currentData.search}
           />
-          <SearchResults />
+          <SearchResults
+            title={currentData.title}
+            description={currentData.description}
+            url={currentData.url}
+          />
         </Container>
       </div>
-    </ArticleContext.Provider>
-  );
+    );
+
 }
 
 export default Search;

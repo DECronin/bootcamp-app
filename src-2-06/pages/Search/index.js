@@ -5,6 +5,7 @@ import SearchResults from "../../components/SearchResults";
 import Alert from "../../components/Alert";
 import ArticleContext from "../../utils/ArticleContext";
 import API from "../../utils/API";
+import useDebounce from "../../utils/useDebounce";
 
 function Search() {
   const [articleState, setArticleState] = useState({
@@ -16,6 +17,7 @@ function Search() {
   const [search, setSearch] = useState("Wikipedia");
   const [error, setError] = useState("");
 
+  const debouncer = useDebounce(search, 500);
   // When the component mounts, update the title to be Wikipedia Searcher
   useEffect(() => {
     document.title = "Wikipedia Searcher";
@@ -24,22 +26,24 @@ function Search() {
       return;
     }
 
-    API.searchTerms(search)
-      .then(res => {
-        if (res.data.length === 0) {
-          throw new Error("No results found.");
-        }
-        if (res.data.status === "error") {
-          throw new Error(res.data.message);
-        }
-        setArticleState({
-          title: res.data[1],
-          description: res.data[2][0],
-          url: res.data[3][0]
-        });
-      })
-      .catch(err => setError(err));
-  }, [search]);
+    if(debouncer){
+      API.searchTerms(search)
+        .then(res => {
+          if (res.data.length === 0) {
+            throw new Error("No results found.");
+          }
+          if (res.data.status === "error") {
+            throw new Error(res.data.message);
+          }
+          setArticleState({
+            title: res.data[1],
+            description: res.data[2][0],
+            url: res.data[3][0]
+          });
+        })
+        .catch(err => setError(err));
+      }
+  }, [debouncer]);
 
   const handleInputChange = event => {
     setSearch(event.target.value);

@@ -49,10 +49,6 @@ function Search() {
     event.preventDefault();
   };
 
-  useDebounce((value, delay) => {
-
-  });
-
   return (
     <ArticleContext.Provider value={articleState}>
       <div>
